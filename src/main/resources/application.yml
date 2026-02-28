@@ -1,0 +1,51 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ecommerce-backend
+  
+  # Disable cache temporarily (Step 6 will configure properly)
+  cache:
+    type: simple  # ← Simple in-memory cache (Step 6)
+    cache-names: products,users
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_db
+    username: postgres
+    password: Po$t@1234
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      leak-detection-threshold: 60000
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: false
+        format_sql: true
+        '[dialect]': org.hibernate.dialect.PostgreSQLDialect
+        '[jdbc.lob.non_contextual_creation]': true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+    baseline-version: 1
+    out-of-order: true  
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG  
+    org.hibernate.type.descriptor.sql: TRACE
+    com.ecommerce: DEBUG
